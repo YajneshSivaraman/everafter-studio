@@ -1,0 +1,21 @@
+﻿# Dependencies — reinstallable from package.json.
+node_modules/
+
+# Production build output.
+dist/
+
+# Local environment variables and secrets.
+.env
+.env.*
+
+# Keep example environment templates if needed.
+!.env.example
+
+# Debug logs.
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Operating system files.
+.DS_Store
+Thumbs.db

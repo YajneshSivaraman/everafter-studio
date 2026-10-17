@@ -1,0 +1,57 @@
+/* Load an elegant editorial font and a clean modern body font. */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+/* Keep Tailwind's stylesheet import below the font import. */
+@import "tailwindcss";
+
+
+
+/* Load Tailwind CSS utilities. */
+
+
+@import "tailwindcss";
+
+/* Define the studio's default visual foundation. */
+:root {
+  /* Use a clean sans-serif font for the default body text. */
+font-family: 'DM Sans', Arial, sans-serif;
+  color: #29251f;
+  background: #f8f6f1;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+/* Make sizing consistent across components. */
+* {
+  box-sizing: border-box;
+}
+
+/* Remove browser defaults and prevent horizontal overflow. */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+/* Keep links clean and images responsive. */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Give headings a refined, editorial wedding-magazine appearance. */
+h1,
+h2,
+h3 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+}
