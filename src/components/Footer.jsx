@@ -38,9 +38,20 @@ export default function Footer() {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-fit border border-white/50 px-6 py-4 text-xs uppercase tracking-[0.18em] transition-colors duration-300 hover:bg-white hover:text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-          >
-            Start an enquiry ↗
+           className="w-fit border border-white/50 px-6 py-4 text-xs uppercase tracking-[0.18em] text-[#f8f6f1] transition-colors duration-300 hover:bg-white hover:!text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" >
+            Start an enquiry <svg
+  aria-hidden="true"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  strokeWidth="1.5"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+  className="inline-block ml-2 h-3.5 w-3.5 align-middle"
+>
+  <path d="M7 17 17 7" />
+  <path d="M8 7h9v9" />
+</svg>
           </a>
         </div>
 

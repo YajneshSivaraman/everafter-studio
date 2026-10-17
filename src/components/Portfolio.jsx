@@ -148,7 +148,19 @@ export default function Portfolio() {
 
                   {/* Reveal a subtle view-photo label on hover. */}
                   <span className="absolute bottom-5 right-5 translate-y-2 border border-white/70 px-4 py-3 text-[10px] uppercase tracking-[0.2em] text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-                    View photograph ↗
+                    View photograph <svg
+  aria-hidden="true"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  strokeWidth="1.5"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+  className="inline-block ml-2 h-3.5 w-3.5 align-middle"
+>
+  <path d="M7 17 17 7" />
+  <path d="M8 7h9v9" />
+</svg>
                   </span>
                 </button>
 
@@ -169,7 +181,19 @@ export default function Portfolio() {
                     aria-hidden="true"
                     className="pt-1 text-xl text-stone-500 transition-transform duration-300 hover:translate-x-1"
                   >
-                    ↗
+                    <svg
+  aria-hidden="true"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  strokeWidth="1.5"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+  className="inline-block ml-2 h-3.5 w-3.5 align-middle"
+>
+  <path d="M7 17 17 7" />
+  <path d="M8 7h9v9" />
+</svg>
                   </span>
                 </div>
               </article>
@@ -182,7 +206,19 @@ export default function Portfolio() {
               href="#contact"
               className="inline-block border-b border-stone-400 pb-2 text-xs uppercase tracking-[0.2em] transition-colors hover:border-stone-900"
             >
-              Enquire about your wedding ↗
+              Enquire about your wedding <svg
+  aria-hidden="true"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  strokeWidth="1.5"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+  className="inline-block ml-2 h-3.5 w-3.5 align-middle"
+>
+  <path d="M7 17 17 7" />
+  <path d="M8 7h9v9" />
+</svg>
             </a>
           </div>
 

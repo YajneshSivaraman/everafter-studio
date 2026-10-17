@@ -80,7 +80,19 @@ export default function Services() {
                 href="#contact"
                 className="mt-8 inline-flex items-center gap-3 text-sm transition hover:gap-5"
               >
-                Discuss your plans <span aria-hidden="true">↗</span>
+                Discuss your plans <span aria-hidden="true"><svg
+  aria-hidden="true"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  strokeWidth="1.5"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+  className="inline-block ml-2 h-3.5 w-3.5 align-middle"
+>
+  <path d="M7 17 17 7" />
+  <path d="M8 7h9v9" />
+</svg></span>
               </a>
             </article>
           ))}
