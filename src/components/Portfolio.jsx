@@ -33,16 +33,35 @@ const stories = [
   },
 ]
 
+// Reusable arrow icon to keep the design consistent.
+function ArrowIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="ml-2 inline-block h-3.5 w-3.5 align-middle"
+    >
+      <path d="M7 17 17 7" />
+      <path d="M8 7h9v9" />
+    </svg>
+  )
+}
+
 // Render the featured portfolio and interactive lightbox.
 export default function Portfolio() {
-  // Store the index of the currently enlarged image, or null when closed.
+  // Store the index of the enlarged image, or null when closed.
   const [activeStoryIndex, setActiveStoryIndex] = useState(null)
 
-  // Derive the selected story from the current index.
+  // Get the selected story from its index.
   const activeStory =
     activeStoryIndex === null ? null : stories[activeStoryIndex]
 
-  // Support Escape and arrow keys while the photo viewer is open.
+  // Support Escape, ArrowRight, and ArrowLeft while the viewer is open.
   useEffect(() => {
     if (activeStoryIndex === null) return
 
@@ -52,31 +71,37 @@ export default function Portfolio() {
       }
 
       if (event.key === 'ArrowRight') {
-        setActiveStoryIndex((current) => (current + 1) % stories.length)
+        setActiveStoryIndex(
+          (current) => (current + 1) % stories.length,
+        )
       }
 
       if (event.key === 'ArrowLeft') {
         setActiveStoryIndex(
-          (current) => (current - 1 + stories.length) % stories.length,
+          (current) =>
+            (current - 1 + stories.length) % stories.length,
         )
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
 
-    // Remove the listener when the viewer closes or the component unmounts.
+    // Remove the listener when the viewer closes or unmounts.
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [activeStoryIndex])
 
-  // Move to the next photograph, wrapping back to the first one.
+  // Move to the next photograph, wrapping to the first one.
   const showNext = () => {
-    setActiveStoryIndex((current) => (current + 1) % stories.length)
+    setActiveStoryIndex(
+      (current) => (current + 1) % stories.length,
+    )
   }
 
   // Move to the previous photograph, wrapping to the last one.
   const showPrevious = () => {
     setActiveStoryIndex(
-      (current) => (current - 1 + stories.length) % stories.length,
+      (current) =>
+        (current - 1 + stories.length) % stories.length,
     )
   }
 
@@ -88,7 +113,6 @@ export default function Portfolio() {
         className="bg-[#f8f6f1] px-6 py-24 md:px-12 md:py-32"
       >
         <div className="mx-auto max-w-7xl">
-
           {/* Editorial introduction to the gallery. */}
           <div className="mb-12 flex flex-col gap-6 md:mb-16 md:flex-row md:items-end md:justify-between">
             <div>
@@ -99,13 +123,14 @@ export default function Portfolio() {
               <h2 className="max-w-2xl font-serif text-4xl leading-tight text-stone-900 md:text-6xl">
                 Every love story
                 <br />
-                deserves to be <span className="italic">remembered.</span>
+                deserves to be{' '}
+                <span className="italic">remembered.</span>
               </h2>
             </div>
 
             <p className="max-w-sm text-sm leading-7 text-stone-600">
-              Real feelings, thoughtful frames, and the fleeting moments that
-              become part of your story.
+              Real feelings, thoughtful frames, and the fleeting
+              moments that become part of your story.
             </p>
           </div>
 
@@ -114,13 +139,9 @@ export default function Portfolio() {
             {stories.map((story, index) => (
               <article
                 key={story.number}
-                className={
-                  story.layout === 'large'
-                    ? 'md:col-span-2'
-                    : ''
-                }
+                className={story.layout === 'large' ? 'md:col-span-2' : ''}
               >
-                {/* The image button opens the selected photograph in the viewer. */}
+                {/* Clicking a photograph opens the full-screen viewer. */}
                 <button
                   type="button"
                   onClick={() => setActiveStoryIndex(index)}
@@ -133,12 +154,12 @@ export default function Portfolio() {
                     loading="lazy"
                     className={`w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] ${
                       story.layout === 'large'
-                        ? 'h-[320px] md:h-[560px]'
-                        : 'h-[320px] md:h-[420px]'
+                        ? 'h-[260px] sm:h-[360px] md:h-[560px]'
+                        : 'h-[280px] sm:h-[320px] md:h-[420px]'
                     }`}
                   />
 
-                  {/* Soft gradient keeps the image number readable. */}
+                  {/* Soft gradient keeps the story number readable. */}
                   <span className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/35 to-transparent" />
 
                   {/* Story number in the upper-left corner. */}
@@ -146,21 +167,10 @@ export default function Portfolio() {
                     {story.number}
                   </span>
 
-                  {/* Reveal a subtle view-photo label on hover. */}
+                  {/* Reveal a subtle view-photo label on hover or keyboard focus. */}
                   <span className="absolute bottom-5 right-5 translate-y-2 border border-white/70 px-4 py-3 text-[10px] uppercase tracking-[0.2em] text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-                    View photograph <svg
-  aria-hidden="true"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="currentColor"
-  strokeWidth="1.5"
-  strokeLinecap="round"
-  strokeLinejoin="round"
-  className="inline-block ml-2 h-3.5 w-3.5 align-middle"
->
-  <path d="M7 17 17 7" />
-  <path d="M8 7h9v9" />
-</svg>
+                    View photograph
+                    <ArrowIcon />
                   </span>
                 </button>
 
@@ -179,21 +189,9 @@ export default function Portfolio() {
                   {/* Decorative arrow. */}
                   <span
                     aria-hidden="true"
-                    className="pt-1 text-xl text-stone-500 transition-transform duration-300 hover:translate-x-1"
+                    className="pt-1 text-xl text-stone-500 transition-transform duration-300"
                   >
-                    <svg
-  aria-hidden="true"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="currentColor"
-  strokeWidth="1.5"
-  strokeLinecap="round"
-  strokeLinejoin="round"
-  className="inline-block ml-2 h-3.5 w-3.5 align-middle"
->
-  <path d="M7 17 17 7" />
-  <path d="M8 7h9v9" />
-</svg>
+                    <ArrowIcon />
                   </span>
                 </div>
               </article>
@@ -206,88 +204,82 @@ export default function Portfolio() {
               href="#contact"
               className="inline-block border-b border-stone-400 pb-2 text-xs uppercase tracking-[0.2em] transition-colors hover:border-stone-900"
             >
-              Enquire about your wedding <svg
-  aria-hidden="true"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="currentColor"
-  strokeWidth="1.5"
-  strokeLinecap="round"
-  strokeLinejoin="round"
-  className="inline-block ml-2 h-3.5 w-3.5 align-middle"
->
-  <path d="M7 17 17 7" />
-  <path d="M8 7h9v9" />
-</svg>
+              Enquire about your wedding
+              <ArrowIcon />
             </a>
           </div>
 
-          {/* Honest disclosure that this portfolio is a concept demo. */}
+          {/* Disclosure that this is a concept portfolio. */}
           <p className="mt-10 text-[10px] uppercase tracking-[0.18em] text-stone-400">
             Selected imagery · Concept portfolio
           </p>
         </div>
       </section>
 
-      {/* Full-screen photograph viewer, rendered only when a photo is selected. */}
+      {/* Full-screen photograph viewer, shown after an image is selected. */}
       {activeStory && (
         <div
           role="dialog"
           aria-modal="true"
           aria-label="Wedding photograph viewer"
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#171512]/95 p-4 backdrop-blur-sm md:p-10"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#171512]/95 p-3 backdrop-blur-sm sm:p-5 md:p-10"
           onClick={() => setActiveStoryIndex(null)}
         >
-          {/* Viewer content stops backdrop clicks from closing it. */}
+          {/* Keep the entire viewer within the available viewport height. */}
           <div
-            className="relative flex max-h-full w-full max-w-6xl flex-col items-center"
+            className="flex h-[calc(100dvh-1.5rem)] max-h-[900px] w-full max-w-6xl flex-col sm:h-[calc(100dvh-2.5rem)]"
             onClick={(event) => event.stopPropagation()}
           >
-            {/* Close button. */}
-            <button
-              type="button"
-              onClick={() => setActiveStoryIndex(null)}
-              aria-label="Close photograph viewer"
-              className="absolute -top-12 right-0 flex h-10 w-10 items-center justify-center border border-white/40 text-2xl text-white transition-colors hover:bg-white hover:text-stone-900 md:-top-14"
-            >
-              ×
-            </button>
+            {/* Close button stays inside the visible screen. */}
+            <div className="flex w-full shrink-0 justify-end pb-2">
+              <button
+                type="button"
+                onClick={() => setActiveStoryIndex(null)}
+                aria-label="Close photograph viewer"
+                className="flex h-11 w-11 shrink-0 items-center justify-center border border-white/40 text-2xl text-white transition-colors hover:bg-white hover:text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                ×
+              </button>
+            </div>
 
-            {/* Previous photograph control. */}
-            <button
-              type="button"
-              onClick={showPrevious}
-              aria-label="Previous photograph"
-              className="absolute left-0 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/50 bg-black/20 text-2xl text-white transition-colors hover:bg-white hover:text-stone-900 md:-left-14"
-            >
-              ‹
-            </button>
+            {/* Image stage anchors the previous and next buttons. */}
+            <div className="relative flex min-h-0 w-full flex-1 items-center justify-center">
+              {/* Scale the photograph without cropping or overflowing the screen. */}
+              <img
+                src={activeStory.image}
+                alt={activeStory.alt}
+                className="h-auto w-auto max-h-full max-w-full object-contain"
+              />
 
-            {/* Next photograph control, vertically centered on the image. */}
-<button
-  type="button"
-  onClick={showNext}
-  aria-label="Next photograph"
-  className="absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/50 bg-black/40 text-2xl text-white transition-colors hover:bg-white hover:text-stone-900 md:-right-14"
->
-  ›
-</button>
+              {/* Previous photograph button. */}
+              <button
+                type="button"
+                onClick={showPrevious}
+                aria-label="Previous photograph"
+                className="absolute left-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/50 bg-black/50 text-2xl text-white transition-colors hover:bg-white hover:text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:left-3 md:-left-14"
+              >
+                ‹
+              </button>
 
-            {/* Enlarged image fits the available screen height. */}
-            <img
-              src={activeStory.image}
-              alt={activeStory.alt}
-              className="max-h-[72vh] w-full object-contain md:max-h-[78vh]"
-            />
+              {/* Next photograph button. */}
+              <button
+                type="button"
+                onClick={showNext}
+                aria-label="Next photograph"
+                className="absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/50 bg-black/50 text-2xl text-white transition-colors hover:bg-white hover:text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:right-3 md:-right-14"
+              >
+                ›
+              </button>
+            </div>
 
-            {/* Caption updates as the selected image changes. */}
-            <div className="mt-5 flex w-full items-end justify-between gap-4 text-white">
-              <div>
+            {/* Caption and image position remain visible below the photograph. */}
+            <div className="flex w-full shrink-0 items-end justify-between gap-4 pt-3 text-white sm:pt-5">
+              <div className="min-w-0">
                 <p className="text-[10px] uppercase tracking-[0.2em] text-white/60">
-                  {activeStory.number} / 0{stories.length}
+                  {activeStory.number} / {String(stories.length).padStart(2, '0')}
                 </p>
 
-                <h3 className="mt-1 font-serif text-2xl md:text-3xl">
+                <h3 className="mt-1 break-words font-serif text-xl sm:text-2xl md:text-3xl">
                   {activeStory.title}
                 </h3>
 
@@ -296,7 +288,10 @@ export default function Portfolio() {
                 </p>
               </div>
 
-              
+              {/* Compact position indicator. */}
+              <p className="shrink-0 pb-1 text-xs text-white/60">
+                {activeStoryIndex + 1} of {stories.length}
+              </p>
             </div>
           </div>
         </div>
