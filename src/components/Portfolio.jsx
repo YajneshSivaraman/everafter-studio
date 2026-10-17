@@ -227,6 +227,16 @@ export default function Portfolio() {
               ‹
             </button>
 
+            {/* Next photograph control, vertically centered on the image. */}
+<button
+  type="button"
+  onClick={showNext}
+  aria-label="Next photograph"
+  className="absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/50 bg-black/40 text-2xl text-white transition-colors hover:bg-white hover:text-stone-900 md:-right-14"
+>
+  ›
+</button>
+
             {/* Enlarged image fits the available screen height. */}
             <img
               src={activeStory.image}
@@ -250,15 +260,7 @@ export default function Portfolio() {
                 </p>
               </div>
 
-              {/* Next photograph control. */}
-              <button
-                type="button"
-                onClick={showNext}
-                aria-label="Next photograph"
-                className="flex h-11 w-11 shrink-0 items-center justify-center border border-white/50 text-2xl transition-colors hover:bg-white hover:text-stone-900"
-              >
-                →
-              </button>
+              
             </div>
           </div>
         </div>
