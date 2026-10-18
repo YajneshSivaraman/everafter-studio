@@ -55,3 +55,278 @@ h3 {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-weight: 500;
 }
+
+
+/* ==========================================
+   EVERAFTER — CINEMATIC MOTION SYSTEM
+   Reusable animations for the entire website
+   ========================================== */
+
+/* Smooth scrolling for navigation links. */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent animations from feeling abrupt on interactive elements. */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Cinematic fade and upward movement for entering content. */
+@keyframes everafter-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gentle zoom for hero photography. */
+@keyframes everafter-hero-zoom {
+  from {
+    transform: scale(1.07);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Soft entrance for the lightbox. */
+@keyframes everafter-lightbox-in {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Reusable entrance animation for hero text and other content. */
+.everafter-intro {
+  animation: everafter-fade-up 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Slight delays create a deliberate, staggered entrance. */
+.everafter-delay-1 {
+  animation-delay: 150ms;
+}
+
+.everafter-delay-2 {
+  animation-delay: 300ms;
+}
+
+.everafter-delay-3 {
+  animation-delay: 450ms;
+}
+
+/* Hero background animation. Apply this class to the image itself. */
+.everafter-hero-image {
+  animation: everafter-hero-zoom 1800ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Lightbox entrance animation. */
+.everafter-lightbox-in {
+  animation: everafter-lightbox-in 300ms ease-out both;
+}
+
+/* Elegant underline animation for navigation links. */
+.everafter-nav-link {
+  position: relative;
+  text-decoration: none;
+}
+
+.everafter-nav-link::after {
+  position: absolute;
+  right: 0;
+  bottom: -5px;
+  left: 0;
+  height: 1px;
+  content: "";
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 300ms ease;
+}
+
+.everafter-nav-link:hover::after,
+.everafter-nav-link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Respect visitors who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+/* Scroll reveal: start hidden and slightly below the final position. */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/* Entering the viewport reveals the element. */
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Avoid hidden content when visitors prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .scroll-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+
+/* ==========================================
+   EVERAFTER — CINEMATIC HERO REVEAL
+   ========================================== */
+
+/* Clip the headline while its inner text moves into view. */
+.everafter-title-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+/* The headline begins below the visible mask. */
+.everafter-title-line {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: everafter-title-rise 1100ms
+    cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Separate timing makes each headline line feel intentional. */
+.everafter-title-line:nth-child(2) {
+  animation-delay: 180ms;
+}
+
+/* Reveal the headline without fading the whole container. */
+@keyframes everafter-title-rise {
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* A fine line draws across the hero after the headline. */
+.everafter-hero-rule {
+  width: 0;
+  animation: everafter-rule-draw 900ms
+    cubic-bezier(0.22, 1, 0.36, 1) 650ms forwards;
+}
+
+@keyframes everafter-rule-draw {
+  to {
+    width: 100%;
+  }
+}
+
+/* Keep the hero headline readable when motion is reduced. */
+@media (prefers-reduced-motion: reduce) {
+  .everafter-title-line {
+    transform: none;
+    animation: none;
+  }
+
+  .everafter-hero-rule {
+    width: 100%;
+    animation: none;
+  }
+}
+
+
+/* ==========================================
+   EVERAFTER — CINEMATIC PORTFOLIO WIPE
+   ========================================== */
+
+/* The image frame clips the reveal effect to its own boundaries. */
+.portfolio-image-frame {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* A warm overlay sweeps away to uncover each photograph. */
+.portfolio-image-frame::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  background: #ded8cd;
+  transform: scaleY(1);
+  transform-origin: bottom;
+  transition: transform 1100ms cubic-bezier(0.76, 0, 0.24, 1);
+  pointer-events: none;
+}
+
+/* Once the card is visible, the overlay retracts upward. */
+/* Trigger the image wipe when the reveal wrapper becomes visible. */
+.portfolio-card.is-visible .portfolio-image-frame::after {
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+/* Give each image a slow, cinematic zoom on hover. */
+.portfolio-image-frame img {
+  transform: scale(1.015);
+  transition: transform 1200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.portfolio-image-frame:hover img {
+  transform: scale(1.065);
+}
+
+/* The image caption rises subtly when the card is hovered. */
+.portfolio-caption {
+  transition:
+    transform 450ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 300ms ease;
+}
+
+.portfolio-card:hover .portfolio-caption {
+  transform: translateY(-3px);
+}
+
+/* Keep the images immediately visible for reduced-motion visitors. */
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-image-frame::after {
+    display: none;
+  }
+
+  .portfolio-image-frame img,
+  .portfolio-caption {
+    transform: none;
+    transition: none;
+  }
+}
+

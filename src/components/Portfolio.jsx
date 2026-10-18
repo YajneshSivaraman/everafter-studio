@@ -1,8 +1,8 @@
 
-/* Import React state and effects for the interactive photo viewer. */
+import ScrollReveal from './ScrollReveal'
 import { useEffect, useState } from 'react'
 
-// Each object represents one featured wedding story.
+// Featured wedding stories shown in the portfolio gallery.
 const stories = [
   {
     number: '01',
@@ -33,7 +33,7 @@ const stories = [
   },
 ]
 
-// Reusable arrow icon to keep the design consistent.
+// Reusable arrow icon for gallery links and buttons.
 function ArrowIcon() {
   return (
     <svg
@@ -52,16 +52,16 @@ function ArrowIcon() {
   )
 }
 
-// Render the featured portfolio and interactive lightbox.
+// Portfolio gallery and full-screen photograph viewer.
 export default function Portfolio() {
-  // Store the index of the enlarged image, or null when closed.
+  // Null means the lightbox is closed; otherwise, store the selected story index.
   const [activeStoryIndex, setActiveStoryIndex] = useState(null)
 
-  // Get the selected story from its index.
+  // Get the selected story for the lightbox.
   const activeStory =
     activeStoryIndex === null ? null : stories[activeStoryIndex]
 
-  // Support Escape, ArrowRight, and ArrowLeft while the viewer is open.
+  // Support keyboard navigation while the lightbox is open.
   useEffect(() => {
     if (activeStoryIndex === null) return
 
@@ -86,18 +86,20 @@ export default function Portfolio() {
 
     window.addEventListener('keydown', handleKeyDown)
 
-    // Remove the listener when the viewer closes or unmounts.
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    // Clean up the listener when the lightbox closes.
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
   }, [activeStoryIndex])
 
-  // Move to the next photograph, wrapping to the first one.
+  // Navigate forward through the photographs.
   const showNext = () => {
     setActiveStoryIndex(
       (current) => (current + 1) % stories.length,
     )
   }
 
-  // Move to the previous photograph, wrapping to the last one.
+  // Navigate backward through the photographs.
   const showPrevious = () => {
     setActiveStoryIndex(
       (current) =>
@@ -113,7 +115,7 @@ export default function Portfolio() {
         className="bg-[#f8f6f1] px-6 py-24 md:px-12 md:py-32"
       >
         <div className="mx-auto max-w-7xl">
-          {/* Editorial introduction to the gallery. */}
+          {/* Portfolio introduction. */}
           <div className="mb-12 flex flex-col gap-6 md:mb-16 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="mb-4 text-xs uppercase tracking-[0.25em] text-stone-500">
@@ -134,48 +136,54 @@ export default function Portfolio() {
             </p>
           </div>
 
-          {/* Responsive gallery with one featured image and two smaller stories. */}
+          {/* Responsive gallery: one wide story and two smaller stories. */}
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10">
             {stories.map((story, index) => (
-              <article
+              <ScrollReveal
                 key={story.number}
-                className={story.layout === 'large' ? 'md:col-span-2' : ''}
+                as="article"
+                delay={index * 120}
+                className={`portfolio-card ${
+                  story.layout === 'large' ? 'md:col-span-2' : ''
+                }`}
               >
-                {/* Clicking a photograph opens the full-screen viewer. */}
+                {/* Clicking an image opens the full-screen viewer. */}
                 <button
                   type="button"
                   onClick={() => setActiveStoryIndex(index)}
                   aria-label={`Enlarge photograph: ${story.title}`}
-                  className="group relative block w-full overflow-hidden bg-stone-200 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-stone-800"
+                  className="portfolio-image-frame group block w-full bg-stone-200 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-stone-800"
                 >
                   <img
                     src={story.image}
                     alt={story.alt}
                     loading="lazy"
-                    className={`w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] ${
+                    className={`w-full object-cover ${
                       story.layout === 'large'
                         ? 'h-[260px] sm:h-[360px] md:h-[560px]'
                         : 'h-[280px] sm:h-[320px] md:h-[420px]'
                     }`}
                   />
 
-                  {/* Soft gradient keeps the story number readable. */}
-                  <span className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/35 to-transparent" />
+                  {/* Gradient improves the number's readability. */}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/35 to-transparent"
+                  />
 
-                  {/* Story number in the upper-left corner. */}
-                  <span className="absolute left-5 top-5 text-xs tracking-widest text-white">
+                  <span className="pointer-events-none absolute left-5 top-5 text-xs tracking-widest text-white">
                     {story.number}
                   </span>
 
-                  {/* Reveal a subtle view-photo label on hover or keyboard focus. */}
-                  <span className="absolute bottom-5 right-5 translate-y-2 border border-white/70 px-4 py-3 text-[10px] uppercase tracking-[0.2em] text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+                  {/* Appears when the image is hovered or keyboard-focused. */}
+                  <span className="pointer-events-none absolute bottom-5 right-5 z-10 translate-y-2 border border-white/70 px-4 py-3 text-[10px] uppercase tracking-[0.2em] text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
                     View photograph
                     <ArrowIcon />
                   </span>
                 </button>
 
-                {/* Story title and category below each image. */}
-                <div className="flex items-start justify-between gap-4 py-5">
+                {/* Photograph title and category. */}
+                <div className="portfolio-caption flex items-start justify-between gap-4 py-5">
                   <div>
                     <h3 className="font-serif text-2xl text-stone-900 md:text-3xl">
                       {story.title}
@@ -186,7 +194,6 @@ export default function Portfolio() {
                     </p>
                   </div>
 
-                  {/* Decorative arrow. */}
                   <span
                     aria-hidden="true"
                     className="pt-1 text-xl text-stone-500 transition-transform duration-300"
@@ -194,11 +201,11 @@ export default function Portfolio() {
                     <ArrowIcon />
                   </span>
                 </div>
-              </article>
+              </ScrollReveal>
             ))}
           </div>
 
-          {/* Contact link for prospective wedding clients. */}
+          {/* Link to the contact section. */}
           <div className="mt-10">
             <a
               href="#contact"
@@ -209,14 +216,14 @@ export default function Portfolio() {
             </a>
           </div>
 
-          {/* Disclosure that this is a concept portfolio. */}
+          {/* Identify this as a concept portfolio. */}
           <p className="mt-10 text-[10px] uppercase tracking-[0.18em] text-stone-400">
             Selected imagery · Concept portfolio
           </p>
         </div>
       </section>
 
-      {/* Full-screen photograph viewer, shown after an image is selected. */}
+      {/* Full-screen photograph viewer. */}
       {activeStory && (
         <div
           role="dialog"
@@ -225,12 +232,11 @@ export default function Portfolio() {
           className="fixed inset-0 z-[100] flex items-center justify-center bg-[#171512]/95 p-3 backdrop-blur-sm sm:p-5 md:p-10"
           onClick={() => setActiveStoryIndex(null)}
         >
-          {/* Keep the entire viewer within the available viewport height. */}
           <div
             className="flex h-[calc(100dvh-1.5rem)] max-h-[900px] w-full max-w-6xl flex-col sm:h-[calc(100dvh-2.5rem)]"
             onClick={(event) => event.stopPropagation()}
           >
-            {/* Close button stays inside the visible screen. */}
+            {/* Close button. */}
             <div className="flex w-full shrink-0 justify-end pb-2">
               <button
                 type="button"
@@ -242,16 +248,14 @@ export default function Portfolio() {
               </button>
             </div>
 
-            {/* Image stage anchors the previous and next buttons. */}
+            {/* Image stage with previous and next controls. */}
             <div className="relative flex min-h-0 w-full flex-1 items-center justify-center">
-              {/* Scale the photograph without cropping or overflowing the screen. */}
               <img
                 src={activeStory.image}
                 alt={activeStory.alt}
                 className="h-auto w-auto max-h-full max-w-full object-contain"
               />
 
-              {/* Previous photograph button. */}
               <button
                 type="button"
                 onClick={showPrevious}
@@ -261,7 +265,6 @@ export default function Portfolio() {
                 ‹
               </button>
 
-              {/* Next photograph button. */}
               <button
                 type="button"
                 onClick={showNext}
@@ -272,11 +275,12 @@ export default function Portfolio() {
               </button>
             </div>
 
-            {/* Caption and image position remain visible below the photograph. */}
+            {/* Caption and current photograph position. */}
             <div className="flex w-full shrink-0 items-end justify-between gap-4 pt-3 text-white sm:pt-5">
               <div className="min-w-0">
                 <p className="text-[10px] uppercase tracking-[0.2em] text-white/60">
-                  {activeStory.number} / {String(stories.length).padStart(2, '0')}
+                  {activeStory.number} /{' '}
+                  {String(stories.length).padStart(2, '0')}
                 </p>
 
                 <h3 className="mt-1 break-words font-serif text-xl sm:text-2xl md:text-3xl">
@@ -288,7 +292,6 @@ export default function Portfolio() {
                 </p>
               </div>
 
-              {/* Compact position indicator. */}
               <p className="shrink-0 pb-1 text-xs text-white/60">
                 {activeStoryIndex + 1} of {stories.length}
               </p>
